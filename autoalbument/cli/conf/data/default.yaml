@@ -11,7 +11,7 @@ input_dtype: uint8
 # - float32. In that case, all input images should be NumPy arrays with the np.float32 data type and values in the
 #   range [0.0, 1.0].
 
-preprocessing: null
+# preprocessing: null
 # A list of preprocessing augmentations that will be applied to each image before applying augmentations from
 # a policy. A preprocessing augmentation should be defined as `key`: `value`, where `key` is the name of augmentation
 # from Albumentations, and `value` is a dictionary with augmentation parameters. The found policy will also apply
@@ -20,16 +20,16 @@ preprocessing: null
 # Here is an example of an augmentation pipeline that first pads an image to the size 512x512 pixels, then resizes
 # the resulting image to the size 256x256 pixels and finally crops a random patch with the size 224x224 pixels.
 #
-#  preprocessing:
-#    - PadIfNeeded:
-#        min_height: 512
-#        min_width: 512
-#    - Resize:
-#        height: 256
-#        width: 256
-#    - RandomCrop:
-#        height: 224
-#        width: 224
+preprocessing:
+  - PadIfNeeded:
+      min_height: 512
+      min_width: 512
+  - Resize:
+      height: 256
+      width: 256
+  - RandomCrop:
+      height: 224
+      width: 224
 #
 
 normalization:

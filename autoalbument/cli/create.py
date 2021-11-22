@@ -52,18 +52,18 @@ def main(config_dir, task, num_classes, generate_full_config):
     if should_write_file(dataset_file_destination):
         copyfile(dataset_file, dataset_file_destination)
 
-    click.echo(
-        f"\nFiles dataset.py and search.yaml are placed in {config_dir}.\n\n"
-        f"Next steps:\n"
-        f"1. Add the required implementation for dataset methods in "
-        + click.style(str(dataset_file_destination), bold=True)
-        + "\n"
-        + "2. [Optional] Adjust search parameters in "
-        + click.style(str(search_file_destination), bold=True)
-        + "\n"
-        + "3. Run AutoAlbument search with the following command:\n\n"
-        + click.style(f"autoalbument-search --config-dir {config_dir}\n", bold=True)
-    )
+#     click.echo(
+#         f"\nFiles dataset.py and search.yaml are placed in {config_dir}.\n\n"
+#         f"Next steps:\n"
+#         f"1. Add the required implementation for dataset methods in "
+#         + click.style(str(dataset_file_destination), bold=True)
+#         + "\n"
+#         + "2. [Optional] Adjust search parameters in "
+#         + click.style(str(search_file_destination), bold=True)
+#         + "\n"
+#         + "3. Run AutoAlbument search with the following command:\n\n"
+#         + click.style(f"autoalbument-search --config-dir {config_dir}\n", bold=True)
+#     )
 
 
 if __name__ == "__main__":

@@ -38,14 +38,14 @@ class FasterAutoAugmentSearcher(SearcherBase):
         return datamodule
 
     def create_logger(self):
-        logger = instantiate(self.cfg.logger)
+        logger = instantiate(self.cfg.logger, _recursive_=False)
         return logger
 
     def create_callbacks(self):
         callbacks = self.cfg.callbacks
         if not callbacks:
             return []
-        return [instantiate(callback) for callback in callbacks]
+        return [instantiate(callback, _recursive_=False) for callback in callbacks]
 
     def create_trainer_additional_params(self):
         logger = self.create_logger()

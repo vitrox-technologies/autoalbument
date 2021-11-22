@@ -29,10 +29,10 @@ setup(
     url="https://github.com/albumentations-team/autoalbument",
     install_requires=[
         "albumentations>=0.5.1",
-        "pytorch-lightning>=1.1.8,<1.2",
+        "pytorch-lightning",
         "torch>=1.6.0",
         "hydra-core>=1.0",
-        "timm==0.3.2",  # This version is required for segmentation-models-pytorch
+        "timm",  # This version is required for segmentation-models-pytorch
         "segmentation-models-pytorch>=0.1.3",
         "tqdm",
         "click",

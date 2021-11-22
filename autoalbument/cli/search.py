@@ -12,7 +12,9 @@ from omegaconf import OmegaConf
 from autoalbument.config.validation import validate_cfg
 from autoalbument.utils.hydra import get_config_dir
 
-OmegaConf.register_resolver("config_dir", get_config_dir)
+from autoalbument.faster_autoaugment import search
+
+OmegaConf.register_new_resolver("config_dir", get_config_dir)
 colorama.init()
 
 
@@ -48,8 +50,10 @@ def main(cfg):
     validate_cfg(cfg)
     if config_dir is not None:
         sys.path.append(config_dir)
-    print(get_prettified_cfg(cfg))
+#     print(get_prettified_cfg(cfg))
     cwd = os.getcwd()
-    print(f"Working directory: {cwd}")
-    searcher = instantiate(cfg.searcher, cfg=cfg)
+    print(f"{cwd}")
+    import pdb 
+    pdb.set_trace()
+    searcher = instantiate(cfg.searcher, cfg=cfg, _recursive_=False)
     searcher.search()

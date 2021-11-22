@@ -1,15 +1,27 @@
+import cv2
+import torchvision
 import torch.utils.data
 
+from pathlib import Path
+
+from pycocotools.coco import COCO
+
+cv2.setNumThreads(0)
+cv2.ocl.setUseOpenCL(False)
 
 class SearchDataset(torch.utils.data.Dataset):
 
-    def __init__(self, transform=None):
-        self.transform = transform
+    def __init__(self, coco_file, data_root, transform=None):
         # Implement additional initialization logic if needed
+        self.transform = transform
+        self.data_root = Path(data_root)
+        self.coco = COCO(coco_file)
+        self.img_ids = self.coco.getImgIds()
+        
 
     def __len__(self):
         # Replace `...` with the actual implementation
-        ...
+        return len(self.img_ids)
 
     def __getitem__(self, index):
         # Implement logic to get an image and its label using the received index.
@@ -19,9 +31,20 @@ class SearchDataset(torch.utils.data.Dataset):
         #
         # `label` should be an integer in the range [0, model.num_classes - 1] where `model.num_classes`
         # is a value set in the `search.yaml` file.
-
-        image = ...
-        label = ...
+        
+        image_id = self.img_ids[index]
+        
+        image_info = self.coco.loadImgs(ids=image_id)[0]
+        
+        annotations = self.coco.loadAnns(ids=self.coco.getAnnIds(imgIds=image_id))
+        
+        file_path = f"{image_info['id']}.png"
+        
+        image = cv2.imread(str(self.data_root / file_path))
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        
+        ann_ids = self.coco.getAnnIds(imgIds=[image_info["id"]])
+        label = self.coco.loadAnns(ids=self.coco.getAnnIds(imgIds=image_id))[0]["category_id"]
 
         if self.transform is not None:
             transformed = self.transform(image=image)

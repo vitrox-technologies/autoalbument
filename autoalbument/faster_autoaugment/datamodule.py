@@ -26,7 +26,7 @@ class FasterAutoAugmentDataModule(pl.LightningDataModule):
         self.dataset = self._instantiate_dataset()
 
     def train_dataloader(self):
-        dataloader = instantiate(self.data_cfg.dataloader, dataset=self.dataset)
+        dataloader = instantiate(self.data_cfg.dataloader, dataset=self.dataset, _recursive_=False)
         return dataloader
 
     def create_transform(self):
@@ -70,8 +70,8 @@ class FasterAutoAugmentDataModule(pl.LightningDataModule):
         data_cfg = self.data_cfg
         transform = self.transform
         if getattr(data_cfg, "dataset", None):
-            dataset = instantiate(data_cfg.dataset, transform=transform)
-        elif getattr(data_cfg, "dataset_file", None):
+            dataset = instantiate(data_cfg.dataset, transform=transform, _recursive_=False)
+        elif getattr(data_cfg, "dataset_file", None):  
             dataset_cls = get_dataset_cls(data_cfg.dataset_file)
             dataset = dataset_cls(transform=transform)
         else:

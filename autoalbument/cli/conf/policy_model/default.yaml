@@ -41,19 +41,33 @@ operation_count: 4
 operations:
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftRGB
     shift_r: true
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftRGB
     shift_g: true
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftRGB
     shift_b: true
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomBrightness
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomContrast
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.Solarize
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.HorizontalFlip
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.VerticalFlip
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.Rotate
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftX
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftY
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.Scale
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.CutoutFixedNumberOfHoles
+    temperature: 0.05
   - _target_: autoalbument.faster_autoaugment.models.policy_operations.CutoutFixedSize
+    temperature: 0.05
   # A list of augmentation operations that will be applied to input data.
