@@ -20,7 +20,9 @@ from autoalbument.utils.click import should_write_file
     required=True,
     help="Deep learning task (either classification or semantic segmentation)",
 )
-@click.option("--num-classes", type=int, required=True, help="Number of classes in the dataset.")
+@click.option(
+    "--num-classes", type=int, required=True, help="Number of classes in the dataset."
+)
 @click.option(
     "--generate-full-config",
     is_flag=True,
@@ -46,11 +48,12 @@ def main(config_dir, task, num_classes, generate_full_config):
         generate_full_config=generate_full_config,
     )
 
-    if should_write_file(search_file_destination):
-        search_config_builder.write_config(search_file_destination)
+    #     if should_write_file(search_file_destination):
+    search_config_builder.write_config(search_file_destination)
 
-    if should_write_file(dataset_file_destination):
-        copyfile(dataset_file, dataset_file_destination)
+    #     if should_write_file(dataset_file_destination):
+    copyfile(dataset_file, dataset_file_destination)
+
 
 #     click.echo(
 #         f"\nFiles dataset.py and search.yaml are placed in {config_dir}.\n\n"

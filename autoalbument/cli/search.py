@@ -50,10 +50,7 @@ def main(cfg):
     validate_cfg(cfg)
     if config_dir is not None:
         sys.path.append(config_dir)
-#     print(get_prettified_cfg(cfg))
     cwd = os.getcwd()
-    print(f"{cwd}")
-    import pdb 
-    pdb.set_trace()
     searcher = instantiate(cfg.searcher, cfg=cfg, _recursive_=False)
     searcher.search()
+    print(cwd)
