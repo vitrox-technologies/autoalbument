@@ -43,7 +43,9 @@ class SemanticSegmentationModel(BaseDiscriminator):
         model = getattr(smp, architecture)
 
         self.base_model = model(
-            encoder_architecture, encoder_weights=self._get_encoder_weights(pretrained), classes=num_classes
+            encoder_architecture,
+            encoder_weights=self._get_encoder_weights(pretrained),
+            classes=num_classes,
         )
         num_features = self.base_model.encoder.out_channels[-1]
         self.base_model.classification_head = nn.Sequential(

@@ -40,7 +40,8 @@ class SubPolicyStage(nn.Module):
         for target in targets:
             with torch.set_grad_enabled(target_requires_grad(target)):
                 output[target] = (
-                    torch.stack([op[target] for op in operation_outputs]) * self.weights.view(-1, 1, 1, 1, 1)
+                    torch.stack([op[target] for op in operation_outputs])
+                    * self.weights.view(-1, 1, 1, 1, 1)
                 ).sum(0)
         return output
 
@@ -75,7 +76,9 @@ class SubPolicy(nn.Module):
         operation_count: int,
     ):
         super().__init__()
-        self.stages = nn.ModuleList([deepcopy(sub_policy_stage) for _ in range(operation_count)])
+        self.stages = nn.ModuleList(
+            [deepcopy(sub_policy_stage) for _ in range(operation_count)]
+        )
 
     def forward(self, input: Dict[str, Tensor]) -> Dict[str, Tensor]:
         for stage in self.stages:
@@ -83,7 +86,9 @@ class SubPolicy(nn.Module):
         return input
 
     def create_transform(self, input_dtype, p):
-        return A.Sequential([stage.create_transform(input_dtype) for stage in self.stages], p=p)
+        return A.Sequential(
+            [stage.create_transform(input_dtype) for stage in self.stages], p=p
+        )
 
 
 class Policy(nn.Module):
@@ -99,7 +104,10 @@ class Policy(nn.Module):
     ):
         super().__init__()
         self.sub_policies = nn.ModuleList(
-            [SubPolicy(SubPolicyStage(operations, temperature), operation_count) for _ in range(num_sub_policies)]
+            [
+                SubPolicy(SubPolicyStage(operations, temperature), operation_count)
+                for _ in range(num_sub_policies)
+            ]
         )
         self.num_sub_policies = num_sub_policies
         self.temperature = temperature
@@ -122,13 +130,17 @@ class Policy(nn.Module):
 
         prepared_chunked_input = []
         for i in range(num_chunks):
-            prepared_chunked_input.append({target: chunked_input[target][i] for target in targets})
+            prepared_chunked_input.append(
+                {target: chunked_input[target][i] for target in targets}
+            )
 
         if self.num_chunks > 1:
             output = {}
             out_chunks = [self._forward(inp) for inp in prepared_chunked_input]
             for target in targets:
-                output[target] = torch.cat([out_chunk[target] for out_chunk in out_chunks], dim=0)
+                output[target] = torch.cat(
+                    [out_chunk[target] for out_chunk in out_chunks], dim=0
+                )
         else:
             output = self._forward(input)
 
@@ -172,7 +184,13 @@ class Policy(nn.Module):
         return Compose(
             [
                 *preprocessing_transforms,
-                OneOf([sp.create_transform(input_dtype, p=sub_policy_p) for sp in self.sub_policies], p=1),
+                OneOf(
+                    [
+                        sp.create_transform(input_dtype, p=sub_policy_p)
+                        for sp in self.sub_policies
+                    ],
+                    p=1,
+                ),
                 A.Normalize(
                     mean=self._mean.tolist(),
                     std=self._std.tolist(),

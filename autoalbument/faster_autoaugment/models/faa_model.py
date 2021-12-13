@@ -23,8 +23,12 @@ class FAABaseModel(pl.LightningModule):
 
     def configure_optimizers(self):
         optimizer_config = self.cfg.optim
-        main_optimizer = instantiate(optimizer_config.main, params=self.main_model.parameters())
-        policy_optimizer = instantiate(optimizer_config.policy, params=self.policy_model.parameters())
+        main_optimizer = instantiate(
+            optimizer_config.main, params=self.main_model.parameters()
+        )
+        policy_optimizer = instantiate(
+            optimizer_config.policy, params=self.policy_model.parameters()
+        )
         return main_optimizer, policy_optimizer
 
     def create_main_model(self):
@@ -100,10 +104,14 @@ class FAABaseModel(pl.LightningModule):
 
         self.main_model.requires_grad_(False)
         self.policy_model.zero_grad()
-        augmented_input, maybe_augmented_target = self.policy_forward_for_policy_train(a_input, a_target)
+        augmented_input, maybe_augmented_target = self.policy_forward_for_policy_train(
+            a_input, a_target
+        )
         _output, a_output = self.main_model(augmented_input)
 
-        _loss = self.cfg.policy_model.task_factor * self.criterion(_output, maybe_augmented_target)
+        _loss = self.cfg.policy_model.task_factor * self.criterion(
+            _output, maybe_augmented_target
+        )
         self.manual_backward(_loss, policy_optimizer, retain_graph=True)
 
         a_loss = a_output.mean()

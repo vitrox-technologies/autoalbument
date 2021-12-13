@@ -58,7 +58,9 @@ class Operation(nn.Module):
         output = {}
         for target in targets:
             with torch.set_grad_enabled(target_requires_grad(target)):
-                output[target] = (mask * operation_output[target] + (1 - mask) * input[target]).clamp_(0, 1)
+                output[target] = (
+                    mask * operation_output[target] + (1 - mask) * input[target]
+                ).clamp_(0, 1)
 
         return output
 
@@ -105,7 +107,11 @@ class Operation(nn.Module):
 
     def operation(self, input):
         magnitude = self.magnitude
-        value = convert_value_range(magnitude, self.value_range) if magnitude is not None else None
+        value = (
+            convert_value_range(magnitude, self.value_range)
+            if magnitude is not None
+            else None
+        )
 
         output = {}
         targets = input.keys()
@@ -129,7 +135,9 @@ class Operation(nn.Module):
         return self.as_transform(transform_param, p)
 
 
-def value_to_transform_param(value, input_dtype="float32", requires_uint8_scaling=False):
+def value_to_transform_param(
+    value, input_dtype="float32", requires_uint8_scaling=False
+):
     value = value.item()
     if input_dtype == "uint8" and requires_uint8_scaling:
         value = int(value * 255.0)
@@ -144,7 +152,9 @@ def convert_value_range(value, new_range):
 
 class ShiftRGB(Operation):
     def __init__(self, temperature, shift_r=False, shift_g=False, shift_b=False):
-        super().__init__(temperature, value_range=(-1.0, 1.0), requires_uint8_scaling=True)
+        super().__init__(
+            temperature, value_range=(-1.0, 1.0), requires_uint8_scaling=True
+        )
         self.shift_r = shift_r
         self.shift_g = shift_g
         self.shift_b = shift_b
@@ -175,7 +185,9 @@ class RandomBrightness(Operation):
         return F.brightness_adjust(input, beta=value)
 
     def as_transform(self, value, p):
-        return A.RandomBrightnessContrast(brightness_limit=(value, value), contrast_limit=0, p=p)
+        return A.RandomBrightnessContrast(
+            brightness_limit=(value, value), contrast_limit=0, p=p
+        )
 
 
 class RandomContrast(Operation):
@@ -186,7 +198,9 @@ class RandomContrast(Operation):
         return F.contrast_adjust(input, alpha=value)
 
     def as_transform(self, value, p):
-        return A.RandomBrightnessContrast(brightness_limit=0, contrast_limit=(value, value), p=p)
+        return A.RandomBrightnessContrast(
+            brightness_limit=0, contrast_limit=(value, value), p=p
+        )
 
 
 class Solarize(Operation):
@@ -258,7 +272,9 @@ class ShiftY(Operation):
 
 class Scale(Operation):
     def __init__(self, temperature):
-        super().__init__(temperature, value_range=(0 + 1e-8, 10.0), is_spatial_level=True)
+        super().__init__(
+            temperature, value_range=(0 + 1e-8, 10.0), is_spatial_level=True
+        )
 
     def apply_operation(self, input, value):
         return F.scale(input, scale=value)
@@ -293,7 +309,9 @@ class Rotate(Operation):
 class Cutout(Operation):
     def __init__(self, temperature, value_range=(0.0, 1.0)):
         super().__init__(temperature, value_range=value_range, ste=True)
-        self.register_buffer("saved_image_shape", torch.Tensor([0, 0]).type(torch.int64))
+        self.register_buffer(
+            "saved_image_shape", torch.Tensor([0, 0]).type(torch.int64)
+        )
         self.is_image_shape_saved = False
 
     def _save_image_shape(self, image_shape):

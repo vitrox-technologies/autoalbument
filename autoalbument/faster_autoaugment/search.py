@@ -31,7 +31,9 @@ class FasterAutoAugmentSearcher(SearcherBase):
             return FAASemanticSegmentationModel(cfg)
         elif task == "classification":
             return FAAClassificationModel(cfg)
-        raise ValueError(f"Unsupported task: {task}. Supported tasks: classification, semantic_segmentation.")
+        raise ValueError(
+            f"Unsupported task: {task}. Supported tasks: classification, semantic_segmentation."
+        )
 
     def create_datamodule(self):
         datamodule = FasterAutoAugmentDataModule(self.cfg.data)

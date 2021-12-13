@@ -57,8 +57,12 @@ VOC_COLORMAP = [
 
 
 class PascalVOCSearchDataset(VOCSegmentation):
-    def __init__(self, root="~/data/pascal_voc", image_set="train", download=True, transform=None):
-        super().__init__(root=root, image_set=image_set, download=download, transform=transform)
+    def __init__(
+        self, root="~/data/pascal_voc", image_set="train", download=True, transform=None
+    ):
+        super().__init__(
+            root=root, image_set=image_set, download=download, transform=transform
+        )
 
     @staticmethod
     def _convert_to_segmentation_mask(mask):
@@ -71,9 +75,13 @@ class PascalVOCSearchDataset(VOCSegmentation):
         # Each channel in this mask should encode values for a single class. Pixel in a mask channel should have
         # a value of 1.0 if the pixel of the image belongs to this class and 0.0 otherwise.
         height, width = mask.shape[:2]
-        segmentation_mask = np.zeros((height, width, len(VOC_COLORMAP)), dtype=np.float32)
+        segmentation_mask = np.zeros(
+            (height, width, len(VOC_COLORMAP)), dtype=np.float32
+        )
         for label_index, label in enumerate(VOC_COLORMAP):
-            segmentation_mask[:, :, label_index] = np.all(mask == label, axis=-1).astype(float)
+            segmentation_mask[:, :, label_index] = np.all(
+                mask == label, axis=-1
+            ).astype(float)
         return segmentation_mask
 
     def __getitem__(self, index):

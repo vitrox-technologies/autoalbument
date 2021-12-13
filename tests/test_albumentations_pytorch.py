@@ -16,8 +16,12 @@ class Base:
     def test_albumentations_match(self, image_batches, arg):
         np_images, pytorch_batch = image_batches
         tensor_arg = self.scalar_to_tensor(arg)
-        augmented_np_images = [self.albumentations_fn(image, arg) for image in np_images]
-        augmented_pytorch_batch = self.albumentations_pytorch_fn(pytorch_batch, tensor_arg)
+        augmented_np_images = [
+            self.albumentations_fn(image, arg) for image in np_images
+        ]
+        augmented_pytorch_batch = self.albumentations_pytorch_fn(
+            pytorch_batch, tensor_arg
+        )
         assert_batches_match(augmented_np_images, augmented_pytorch_batch)
 
     def test_gradients(self, gradcheck_batch, arg):
@@ -43,13 +47,17 @@ class TestSolarize(Base):
         pass
 
 
-@pytest.mark.parametrize("arg", [[0.0, 0.0, 0.0], [1.0, 1.0, 1.0], [-1.0, -1.0, -1.0], [0.0, 0.7, -0.2]])
+@pytest.mark.parametrize(
+    "arg", [[0.0, 0.0, 0.0], [1.0, 1.0, 1.0], [-1.0, -1.0, -1.0], [0.0, 0.7, -0.2]]
+)
 class TestShiftRgb(Base):
     def albumentations_fn(self, image, arg):
         return F.shift_rgb(image, r_shift=arg[0], g_shift=arg[1], b_shift=arg[2])
 
     def albumentations_pytorch_fn(self, pytorch_batch, arg):
-        return PF.shift_rgb(pytorch_batch, r_shift=arg[0], g_shift=arg[1], b_shift=arg[2])
+        return PF.shift_rgb(
+            pytorch_batch, r_shift=arg[0], g_shift=arg[1], b_shift=arg[2]
+        )
 
 
 @pytest.mark.parametrize("arg", [-1.0, 0.1, 0.5, 1.0])

@@ -7,7 +7,9 @@ from tests.utils import np_to_pytorch
 
 @pytest.fixture
 def image_batches(batch_size=4):
-    np_images = np.random.uniform(low=0.0, high=1.0, size=(batch_size, 128, 128, 3)).astype("float32")
+    np_images = np.random.uniform(
+        low=0.0, high=1.0, size=(batch_size, 128, 128, 3)
+    ).astype("float32")
     pytorch_batch = np_to_pytorch(np_images)
     return np_images, pytorch_batch
 

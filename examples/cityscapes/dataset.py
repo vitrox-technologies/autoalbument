@@ -9,7 +9,9 @@ cv2.ocl.setUseOpenCL(False)
 class CityscapesSearchDataset(torchvision.datasets.Cityscapes):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, target_type="semantic")
-        self.semantic_target_type_index = [i for i, t in enumerate(self.target_type) if t == "semantic"][0]
+        self.semantic_target_type_index = [
+            i for i, t in enumerate(self.target_type) if t == "semantic"
+        ][0]
         self.colormap = self._generate_colormap()
 
     def _generate_colormap(self):
@@ -22,7 +24,9 @@ class CityscapesSearchDataset(torchvision.datasets.Cityscapes):
 
     def _convert_to_segmentation_mask(self, mask):
         height, width = mask.shape[:2]
-        segmentation_mask = np.zeros((height, width, len(self.colormap)), dtype=np.float32)
+        segmentation_mask = np.zeros(
+            (height, width, len(self.colormap)), dtype=np.float32
+        )
         for label_index, label in self.colormap.items():
             segmentation_mask[:, :, label_index] = (mask == label).astype(float)
         return segmentation_mask
@@ -30,7 +34,9 @@ class CityscapesSearchDataset(torchvision.datasets.Cityscapes):
     def __getitem__(self, index):
         image = cv2.imread(self.images[index])
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        mask = cv2.imread(self.targets[index][self.semantic_target_type_index], cv2.IMREAD_UNCHANGED)
+        mask = cv2.imread(
+            self.targets[index][self.semantic_target_type_index], cv2.IMREAD_UNCHANGED
+        )
 
         mask = self._convert_to_segmentation_mask(mask)
 
