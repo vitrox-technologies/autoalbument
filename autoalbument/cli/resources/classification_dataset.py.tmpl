@@ -38,7 +38,7 @@ class SearchDataset(torch.utils.data.Dataset):
         
         annotations = self.coco.loadAnns(ids=self.coco.getAnnIds(imgIds=image_id))
         
-        file_path = f"{image_info['id']}.png"
+        file_path = f"{image_info['file_name']}.png"
         
         image = cv2.imread(str(self.data_root / file_path))
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
