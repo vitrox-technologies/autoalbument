@@ -14,5 +14,5 @@ def test_dataloader_drops_last(tmpdir) -> None:
         )
         os.chdir(tmpdir)
         cfg = compose(config_name="search", overrides=["data.dataloader.batch_size=12"])
-        faa_searcher = instantiate(cfg.searcher, cfg=cfg)
+        faa_searcher = instantiate(cfg.searcher, cfg=cfg, _recursive_=False)
         faa_searcher.search()
