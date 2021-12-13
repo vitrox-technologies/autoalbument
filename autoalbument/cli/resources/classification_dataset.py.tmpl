@@ -38,9 +38,13 @@ class SearchDataset(torch.utils.data.Dataset):
         
         annotations = self.coco.loadAnns(ids=self.coco.getAnnIds(imgIds=image_id))
         
-        file_path = f"{image_info['file_name']}.png"
+        file_path = image_info['file_name']
+        complete_path = str(self.data_root / file_path)
         
-        image = cv2.imread(str(self.data_root / file_path))
+        try:
+            image = cv2.imread(complete_path)
+        except cv2.error:
+            raise RuntimeError(f"Unable to open image at {complete_path}")
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         
         ann_ids = self.coco.getAnnIds(imgIds=[image_info["id"]])
