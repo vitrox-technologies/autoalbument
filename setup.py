@@ -38,8 +38,7 @@ setup(
         "click",
         "colorama",
         "tensorboard",
-        "ruamel.yaml",
-        "torchtext==0.8.0"
+        "ruamel.yaml"
     ],
     entry_points={
         "console_scripts": [
